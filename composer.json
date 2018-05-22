@@ -1,0 +1,19 @@
+{
+    "name": "gclluochen/datastruct",
+    "description": "learning of datastruct",
+    "type": "library",
+    "license": "Free",
+    "authors": [
+        {
+            "name": "luochen",
+            "email": "1005436565@qq.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Datastruct\\": "../"
+        }
+    },
+    "minimum-stability": "dev",
+    "require": {}
+}
