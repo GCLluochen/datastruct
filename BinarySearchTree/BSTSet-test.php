@@ -31,16 +31,36 @@ while (!feof($fp)) {
 }*/
 
 //二分搜索树实现的集合
-$newBst = new BSTSet();
+/*$newBst = new BSTSet();
 for ($i = 0; $i < $tarr->getSize(); $i++) {
     $newBst->add($tarr->get($i));
 }
-echo "BSTSet--Subway: \n different words: " . $newBst->getSize() . "\n";
+echo "BSTSet--Subway: \n different words: " . $newBst->getSize() . "\n";*/
+testSetSpendTime(new BSTSet(), $tarr);
 
 //链表实现的集合
-$newList = new LinkedListSet();
+/*$newList = new LinkedListSet();
 for ($i = 0; $i < $tarr->getSize(); $i++) {
     $newList->add($tarr->get($i));
 }
-echo "LinkedListSet--Subway: \n different words: " . $newList->getSize() . "\n";
+echo "LinkedListSet--Subway: \n different words: " . $newList->getSize() . "\n";*/
+testSetSpendTime(new LinkedListSet(), $tarr);
+
+
+/**
+ * 测试集合的时间消耗
+ * @param SetInterface $set
+ * @param $fromArr
+ */
+function testSetSpendTime(SetInterface $set, $fromArr)
+{
+    $startTime = microtime(true) * 1000;
+    $obj = new $set();
+    for ($i = 0; $i < $fromArr->getSize(); $i++) {
+        $obj->add($fromArr->get($i));
+    }
+    $endTime = microtime(true) * 1000;
+    $timeUse = $endTime - $startTime;
+    echo (get_class($set)) . "--Subway: \n different words: " . $obj->getSize() . "  time: $timeUse\n";
+}
 die;
