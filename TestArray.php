@@ -126,7 +126,7 @@ final class TestArray
      * @param int $index
      * @param int $ele
      */
-    private function set(int $index, int $ele):void
+    public function set(int $index, int $ele):void
     {
         if ($index < 0 || $index >= $this->size) {
             throw new \InvalidArgumentException('Undefined offset');
@@ -248,5 +248,21 @@ final class TestArray
             $newData->push($this->data[$i]);
         }
         $this->data = $newData->data;
+    }
+
+    /**
+     * 交换指定索引的值
+     * @param int $frontIndex
+     * @param int $backIndex
+     */
+    public function swap(int $frontIndex, int $backIndex)
+    {
+        //判断索引值是否有效
+        if ($frontIndex < 0 || $frontIndex > $this->size || $backIndex < 0 || $backIndex > $this->size) {
+            throw new \InvalidArgumentException('Undefined Index!');
+        }
+        $tmpData = $this->data[$frontIndex];
+        $this->data[$frontIndex] = $this->data[$backIndex];
+        $this->data[$backIndex] = $tmpData;
     }
 }
