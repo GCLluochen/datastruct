@@ -6,11 +6,11 @@ require_once("./../autoload.php");
 use Datastruct\TestArray;
 
 /**
- * 最大堆
- * Class MaxHeap
+ * 最小堆
+ * Class MinHeap
  * @package Datastruct\Heap
  */
-class MaxHeap
+class MinHeap
 {
     //TestArray
     protected $data;
@@ -19,6 +19,12 @@ class MaxHeap
     {
         $this->data = new TestArray($capacity);
     }
+
+    public function __get($name)
+    {
+        return $this->data;
+    }
+
 
     /**
      * 获取堆中元素个数
@@ -92,8 +98,8 @@ class MaxHeap
      */
     private function siftUp(int $index)
     {
-        //判断指定索引处的节点值是否大于父节点
-        while ($index > 0 && $this->data->get($index) > $this->data->get($this->getParent($index))) {
+        //判断指定索引处的节点值是否小于父节点
+        while ($index > 0 && $this->data->get($index) < $this->data->get($this->getParent($index))) {
             //大于,交换当前节点与父节点的值
             $this->data->swap($index, $this->getParent($index));
             $index = $this->getParent($index);
@@ -101,10 +107,10 @@ class MaxHeap
     }
 
     /**
-     * 获取堆中最大的元素值
+     * 获取堆中最小的元素值
      * @return int|null
      */
-    public function findMax()
+    public function findMin()
     {
         if ($this->data->isEmpty()) {
             return null;
@@ -113,22 +119,22 @@ class MaxHeap
     }
 
     /**
-     * 取出堆中最大元素 ( 最大堆)
+     * 取出堆中最小元素 ( 最小堆)
      * 首先取出堆中根节点(数组索引0) 的值,然后将堆中最后一个节点(数组长度-1索引处)的值设置为根节点(
      * 同时将最后一个节点置空,然后将根节点分别同左、右子节点比较,同较大的节点交换值,然后继续向下交换,
      * 直到当前值不小于子节点)
      */
-    public function extractMax()
+    public function extractMin()
     {
-        //取出堆中最大的元素
-        $maxData = $this->findMax();
+        //取出堆中最小的元素
+        $maxData = $this->findMin();
 
-        //交换堆中根节点(即最大的元素节点)与最后一个节点的值
+        //交换堆中根节点(即最小的元素节点)与最后一个节点的值
         $this->data->swap(0, $this->getSize() - 1);
         //移除堆的最后一个节点
         $this->data->removeLast();
 
-        //从新的根节点向下依次比较,直到堆满足最大堆条件(每个节点均 >= 其任一子节点)
+        //从新的根节点向下依次比较,直到堆满足最小堆条件(每个节点均 < 其任一子节点)
         $this->siftDown(0);
 
         return $maxData;
@@ -205,21 +211,21 @@ class MaxHeap
 
         //判断当前节点的左节点是否不为空
         while ($this->getLeftChild($index) < $heapSize) {
-            $maxIndex = $this->getLeftChild($index);
-            if (($maxIndex + 1) < $heapSize && ($this->data->get($maxIndex + 1) > $this->data->get($maxIndex))) {
-                //如果当前节点存在右子节点,且右子节点 大于 左子节点
-                //则该节点左右子节点中的最大值为右节点,否则该节点左右子节点中的最大值为左节点
-                $maxIndex = $this->getRightChild($index);
+            $minIndex = $this->getLeftChild($index);
+            if (($minIndex + 1) < $heapSize && ($this->data->get($minIndex + 1) < $this->data->get($minIndex))) {
+                //如果当前节点存在右子节点,且右子节点 小于 左子节点
+                //则该节点左右子节点中的最小节点为右节点,否则该节点左右子节点中的最小节点为左节点
+                $minIndex = $this->getRightChild($index);
             }
-            //判断当前节点是否 大于 左右子节点中的最大值
-            if ($this->data->get($index) > $this->data->get($maxIndex)) {
-                //大于,最大堆成立,跳出循环
+            //判断当前节点是否 小于 左右子节点中的最小值
+            if ($this->data->get($index) < $this->data->get($minIndex)) {
+                //小于,最小堆成立,跳出循环
                 break;
             } else {
-                //不大于,则交换当前节点与左右子节点中的最大值所在节点
-                $this->data->swap($maxIndex, $index);
-                //新的 “根” 节点为左右子节点中的最大值节点的索引
-                $index = $maxIndex;
+                //不小于,则交换当前节点与左右子节点中的最小值所在节点
+                $this->data->swap($minIndex, $index);
+                //新的 “根” 节点为左右子节点中的最小值节点的索引
+                $index = $minIndex;
             }
         }
     }
@@ -228,10 +234,10 @@ class MaxHeap
      * 修改堆中根节点为新的值
      * @param $newVal 新的值
      */
-    public function replace($newVal)
+    public function replace(int $newVal)
     {
-        //首先找到最大值
-        $maxData = $this->findMax();
+        //首先找到最小值
+        $maxData = $this->findMin();
         //将根节点更新为新值
         $this->data->set(0, $newVal);
         //对更新后的新的根节点进行下沉(siftDown)
@@ -240,15 +246,15 @@ class MaxHeap
     }
 
     /**
-     * 将数组构造成最大堆的形式
+     * 将数组构造成最小堆的形式
      * 原理: 从最后一个非叶子节点(即最后一个节点的parent),逆序向前,让每一个节点进行 下沉(siftDown)操作,无叶子节点则不进行下沉
-     * 直到该节点无叶子节点或 >= 全部子节点
+     * 直到该节点无叶子节点或 < 全部子节点
      * @param array $arr 要构造的数组
      */
     public function heapify(array $arr)
     {
         $this->data = (new TestArray(count($arr)))->initFromArray($arr);
-        //首先将该数组视为一个最大堆
+        //首先将该数组视为一个最小堆
         //获取最后一个节点的索引(数组长度-1)
         $lastIndex = $this->getSize() - 1;
         //获取最后一个非叶子节点

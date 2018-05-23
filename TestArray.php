@@ -26,6 +26,20 @@ final class TestArray
     }
 
     /**
+     * 将一个数组初始化为 TestArray
+     * @param array $arr
+     */
+    public function initFromArray(array $arr)
+    {
+        $this->data = [];
+        for ($i = 0; $i < count($arr); $i++) {
+            $this->data[$i] = $arr[$i];
+        }
+        $this->size = count($arr);
+        return $this;
+    }
+
+    /**
      * 获取数组已有元素个数
      * @return int
      */
@@ -78,12 +92,16 @@ final class TestArray
         if ($index < 0 || $index > $this->len) {
             throw new \InvalidArgumentException('Undefined offset');
         }
+        if (intval($this->len) == 0) {
+            $this->len = 1;
+        }
         if ($this->size == $this->len) {
             $newCapacity = 2 * $this->len;//获取扩容后的数组长度
             $this->resize($newCapacity);
 
             //throw new \InvalidArgumentException('Array is full');
         }
+
         $i = $this->size - 1;//获取数组最后一个元素的索引位置
         for (; $i >= $index; $i--) {
             $this->data[$i + 1] = $this->data[$i];
