@@ -118,7 +118,8 @@ final class TestArray
     public function get(int $index)
     {
         if ($index < 0 || $index >= $this->size) {
-            throw new \InvalidArgumentException('Undefined offset');
+            return null;
+            //throw new \InvalidArgumentException('Undefined offset');
         }
         return $this->data[$index];
     }
@@ -146,7 +147,7 @@ final class TestArray
      */
     public function set(int $index, int $ele):void
     {
-        if ($index < 0 || $index >= $this->size) {
+        if ($index < 0 || $index >= $this->len) {
             throw new \InvalidArgumentException('Undefined offset');
         }
         $this->data[$index] = $ele;
@@ -282,5 +283,13 @@ final class TestArray
         $tmpData = $this->data[$frontIndex];
         $this->data[$frontIndex] = $this->data[$backIndex];
         $this->data[$backIndex] = $tmpData;
+    }
+
+    public function __get($pro)
+    {
+        if (property_exists(self::class, $pro)) {
+            return $this->$pro;
+        }
+        return null;
     }
 }
