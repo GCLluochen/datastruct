@@ -144,7 +144,7 @@ class BinarySearchTree
      * @param int $ele
      * @return bool
      */
-    public function contains(int $ele):bool
+    public function contains($ele):bool
     {
         /*$curNode = $this->root;
         do {

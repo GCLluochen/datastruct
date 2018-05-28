@@ -338,4 +338,11 @@ class BSTMap implements MapInterface
         return $node;
     }
 
+
+    public function __get($key)
+    {
+        if (property_exists(self::class, $key)) {
+            return $this->key;
+        }
+    }
 }
