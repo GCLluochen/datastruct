@@ -6,21 +6,22 @@ require_once("./../autoload.php");
 use Datastruct\UnionFind\UFInterface;
 
 /**
- * 并查集第二版 —— UnionFind
+ * 并查集第一版 —— QuickFind
  * Class UnionFind
  * @package Datastruct\UnionFind
  */
-class UnionFind implements UFInterface
+class QuickFind implements UFInterface
 {
     // Array
-    protected $parent;
+    protected $id;
 
     public function __construct(int $size)
     {
-        //parent 长度为 $size
-        $this->parent = [];
+        // ids 长度为 $size
+        $this->ids = [];
+        //初始化时, 每个元素属于不同的集合
         for ($i = 0; $i < $size; $i++) {
-            $this->parent[$i] = $i;
+            $this->id[$i] = $i;
         }
     }
 
@@ -30,7 +31,7 @@ class UnionFind implements UFInterface
      */
     public function getSize():int
     {
-        return count($this->parent);
+        return count($this->id);
     }
 
     /**
@@ -48,32 +49,32 @@ class UnionFind implements UFInterface
      * 合并元素 $p 和 $p 所属集合
      * @param $p
      * @param $q
-     * 时间复杂度: O(h)  h => 集合高度
      */
     public function unionElements($p, $q)
     {
         //首先查找两个元素的集合索引
-        $pRoot = $this->find($p);
-        $qRoot = $this->find($q);
-        if ($pRoot == $qRoot) {
+        $pId = $this->find($p);
+        $qId = $this->find($q);
+        if ($pId == $qId) {
             return;
         }
 
-        //将 pRoot 所在的节点所属集合指向 qRoot
-        $this->parent[$pRoot] = $qRoot;
+        //然后将整个集合中元素 p 所属集合的元素修改为 归属到元素 q 所属集合
+        for ($j = 0; $j < $this->getSize(); $j++) {
+            if ($this->id[$j] == $pId) {
+                $this->id[$j] = $qId;
+            }
+        }
     }
 
     /**
      * 根据元素 $p 查找所属集合索引
-     * @param int $p 要查找的元素
+     * @param int $p
      */
     private function find(int $p)
     {
-        //判断当前元素是否指向了自身,指向自身表示已是根节点,否则继续向上查找
-        while ($p != $this->parent[$p]) {
-            $p = $this->parent[$p];
-        }
-        return $p;
+        $this->valid($p);
+        return $this->id[$p];
     }
 
     /**
