@@ -73,7 +73,6 @@ class UnionFind4 implements UFInterface
             return;
         }
 
-        //将 pRoot 所在的节点所属集合指向 qRoot
         //将 深度较低 的集合指向 深度较高 的集合
         if ($this->rank[$pRoot] < $this->rank[$qRoot]) {
             $this->parent[$pRoot] = $qRoot;
@@ -85,7 +84,6 @@ class UnionFind4 implements UFInterface
             //指向之后,将新的集合根节点深度 +1
             $this->rank[$pRoot] += 1;
         }
-
     }
 
     /**
