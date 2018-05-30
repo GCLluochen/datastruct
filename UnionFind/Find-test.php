@@ -4,9 +4,10 @@ namespace Datastruct\UnionFind;
 require_once("./../autoload.php");
 
 use Datastruct\UnionFind\UFInterface;
-use Datastruct\UnionFind\QuickFind;
-use Datastruct\UnionFind\UnionFind;
+use Datastruct\UnionFind\QuickFind1;
 use Datastruct\UnionFind\UnionFind2;
+use Datastruct\UnionFind\UnionFind3;
+use Datastruct\UnionFind\UnionFind4;
 
 
 /**
@@ -37,19 +38,23 @@ function testUF(UFInterface $uf, int $m):float
 }
 
 //测试元素个数
-$testSize = 10000;
+$testSize = 10000000;
 //测试操作次数
-$m = 100000;
+$m = 10000000;
 
 //QuickFind
-//$qf = new QuickFind($testSize);
-//print "QuickFind: " . testUF($qf, $m) . "\n";
+//$uf1 = new UnionFind1($testSize);
+//print "UnionFind1: " . testUF($uf1, $m) . "\n";
 
-//UnionFind
-$uf1 = new UnionFind($testSize);
-print "UnionFind: " . testUF($uf1, $m) . "\n";
+//UnionFin2
+//$uf2 = new UnionFind2($testSize);
+//print "UnionFind2: " . testUF($uf2, $m) . "\n";
 
-//UnionFind2
-$uf2 = new UnionFind2($testSize);
-print "UnionFind2: " . testUF($uf2, $m) . "\n";
+//UnionFind3
+$uf3 = new UnionFind3($testSize);
+print "UnionFind3: " . testUF($uf3, $m) . "\n";
+
+//UnionFind4
+$uf4 = new UnionFind4($testSize);
+print "UnionFind4: " . testUF($uf4, $m) . "\n";
 die;

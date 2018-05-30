@@ -6,21 +6,24 @@ require_once("./../autoload.php");
 use Datastruct\UnionFind\UFInterface;
 
 /**
- * 并查集第二版 —— UnionFind2
+ * 并查集第三版 —— UnionFind4 带集合元素个数,基于 size 的优化
  * Class UnionFind
  * @package Datastruct\UnionFind
  */
-class UnionFind2 implements UFInterface
+class UnionFind4 implements UFInterface
 {
     // Array
     protected $parent;
+    protected $rank;//各个集合深度
 
     public function __construct(int $size)
     {
         //parent 长度为 $size
         $this->parent = [];
+        $this->rank = [];
         for ($i = 0; $i < $size; $i++) {
             $this->parent[$i] = $i;
+            $this->rank[$i] = 1;
         }
     }
 
@@ -31,6 +34,17 @@ class UnionFind2 implements UFInterface
     public function getSize():int
     {
         return count($this->parent);
+    }
+
+    /**
+     * 获取指定集合中的元素个数
+     * @param int $p
+     * @return mixed
+     */
+    public function rank(int $p)
+    {
+        $this->valid($p);
+        return $this->rank[$p];
     }
 
     /**
@@ -60,7 +74,18 @@ class UnionFind2 implements UFInterface
         }
 
         //将 pRoot 所在的节点所属集合指向 qRoot
-        $this->parent[$pRoot] = $qRoot;
+        //将 深度较低 的集合指向 深度较高 的集合
+        if ($this->rank[$pRoot] < $this->rank[$qRoot]) {
+            $this->parent[$pRoot] = $qRoot;
+        } elseif ($this->rank[$pRoot] > $this->rank[$qRoot]) {
+            $this->parent[$qRoot] = $pRoot;
+        } else {
+            //要合并的两个集合深度相等时,无所谓谁指向谁
+            $this->parent[$qRoot] = $pRoot;
+            //指向之后,将新的集合根节点深度 +1
+            $this->rank[$pRoot] += 1;
+        }
+
     }
 
     /**

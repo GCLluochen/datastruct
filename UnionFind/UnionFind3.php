@@ -6,21 +6,24 @@ require_once("./../autoload.php");
 use Datastruct\UnionFind\UFInterface;
 
 /**
- * 并查集第二版 —— UnionFind2
+ * 并查集第三版 —— UnionFind3 带集合元素个数,基于 size 的优化
  * Class UnionFind
  * @package Datastruct\UnionFind
  */
-class UnionFind2 implements UFInterface
+class UnionFind3 implements UFInterface
 {
     // Array
     protected $parent;
+    protected $sz;//各个集合元素个数
 
     public function __construct(int $size)
     {
         //parent 长度为 $size
         $this->parent = [];
+        $this->sz = [];
         for ($i = 0; $i < $size; $i++) {
             $this->parent[$i] = $i;
+            $this->sz[$i] = 1;
         }
     }
 
@@ -31,6 +34,17 @@ class UnionFind2 implements UFInterface
     public function getSize():int
     {
         return count($this->parent);
+    }
+
+    /**
+     * 获取指定集合中的元素个数
+     * @param int $p
+     * @return mixed
+     */
+    public function sz(int $p)
+    {
+        $this->valid($p);
+        return $this->sz[$p];
     }
 
     /**
@@ -60,7 +74,14 @@ class UnionFind2 implements UFInterface
         }
 
         //将 pRoot 所在的节点所属集合指向 qRoot
-        $this->parent[$pRoot] = $qRoot;
+        if ($this->sz[$pRoot] < $this->sz[$qRoot]) {
+            $this->parent[$pRoot] = $qRoot;
+            $this->sz[$qRoot] += $this->sz[$pRoot];
+        } else {
+            $this->parent[$qRoot] = $pRoot;
+            $this->sz[$pRoot] += $this->sz[$qRoot];
+        }
+
     }
 
     /**
