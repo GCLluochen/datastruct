@@ -43,7 +43,7 @@ $testSize = 10000000;
 $m = 10000000;
 
 //QuickFind
-//$uf1 = new UnionFind1($testSize);
+//$uf1 = new UnionFind($testSize);
 //print "UnionFind1: " . testUF($uf1, $m) . "\n";
 
 //UnionFin2
