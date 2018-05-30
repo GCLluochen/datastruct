@@ -40,7 +40,7 @@ function testUF(UFInterface $uf, int $m):float
 //测试元素个数
 $testSize = 10000000;
 //测试操作次数
-$m = 10000000;
+$m = 1000000;
 
 //QuickFind
 //$uf1 = new UnionFind($testSize);
@@ -57,4 +57,8 @@ print "UnionFind3: " . testUF($uf3, $m) . "\n";
 //UnionFind4
 $uf4 = new UnionFind4($testSize);
 print "UnionFind4: " . testUF($uf4, $m) . "\n";
+
+//UnionFind5
+$uf5 = new UnionFind5($testSize);
+print "UnionFind5: " . testUF($uf5, $m) . "\n";
 die;
